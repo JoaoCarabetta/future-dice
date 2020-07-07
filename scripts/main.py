@@ -24,12 +24,12 @@ def at_least(prob, k, n, p):
 def get_table(prob, tries: int, die: int):
 
     sucesseses = range(1, tries + 1)
-    difficulties = range(1, die + 1)
+    difficulties = range(2, die + 1)
 
     df = pd.DataFrame(
         [
             [
-                at_least(binomial, sucesses, tries, 1 - ((difficulty - 1) / 10))
+                at_least(binomial, sucesses, tries, 1 - ((difficulty - 1) / die))
                 for difficulty in difficulties
             ]
             for sucesses in sucesseses
@@ -56,7 +56,7 @@ bot = commands.Bot(command_prefix="!")
 @bot.command(name="f", help="Simulates rolling dice.")
 async def roll(ctx, *, roll: to_table):
 
-    await ctx.send("Sucess\Difficulty\n" + roll)
+    await ctx.send("# Sucesses\Difficulty\n" + roll)
 
 
 bot.run(TOKEN)
