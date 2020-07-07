@@ -38,7 +38,11 @@ def get_table(prob, tries: int, die: int):
         index=sucesseses,
     )
 
-    return "```\n" + df.to_markdown(tablefmt="simple", floatfmt=".1f") + "\n```"
+    return (
+        "```\n# Sucesses\Difficulty\n\n"
+        + df.to_markdown(tablefmt="simple", floatfmt=".1f")
+        + "\n```"
+    )
 
 
 def to_table(args):
@@ -47,16 +51,19 @@ def to_table(args):
 
     tries, die = args[0].split("d")
 
-    return get_table(binomial, int(tries), int(die))
+    return {"table": get_table(binomial, int(tries), int(die)), "roll": args[0]}
 
 
 bot = commands.Bot(command_prefix="!")
 
 
 @bot.command(name="f", help="Simulates rolling dice.")
-async def roll(ctx, *, roll: to_table):
+async def roll(ctx, *, args: to_table):
 
-    await ctx.send("# Sucesses\Difficulty\n" + roll)
+    await ctx.send(
+        f"What is the probability of having Y successes with difficulty X given that I rolled {args['roll']}?\n"
+        f"{args['table']}"
+    )
 
 
 bot.run(TOKEN)
